@@ -38,7 +38,7 @@ def get_vector_db(uploaded_files):
     
     # MENGGUNAKAN GOOGLE EMBEDDINGS (GRATIS & CEPAT)
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/text-embedding-001",
+        model="embedding-001",
         google_api_key=os.getenv("GOOGLE_API_KEY")
     )
     
