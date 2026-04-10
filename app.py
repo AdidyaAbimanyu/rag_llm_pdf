@@ -38,7 +38,7 @@ def get_vector_db(uploaded_files):
     
     # Gunakan model ini, paling jarang kena 404
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/text-embedding-004", 
+        model="gemini-embedding-001", 
         google_api_key=os.getenv("GOOGLE_API_KEY")
     )
     
