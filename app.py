@@ -7,8 +7,8 @@ from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_classic.chains import create_history_aware_retriever, create_retrieval_chain
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 # Load environment variables
@@ -38,7 +38,7 @@ def get_vector_db(uploaded_files):
     
     # MENGGUNAKAN GOOGLE EMBEDDINGS (GRATIS & CEPAT)
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="embedding-001",
+        model="models/text-embedding-004", 
         google_api_key=os.getenv("GOOGLE_API_KEY")
     )
     
