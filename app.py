@@ -33,13 +33,14 @@ def get_vector_db(uploaded_files):
         all_docs.extend(loader.load())
         os.remove(temp_path)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
     chunks = text_splitter.split_documents(all_docs)
     
     # Gunakan model ini, paling jarang kena 404
     embeddings = GoogleGenerativeAIEmbeddings(
         model="gemini-embedding-001", 
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
+        task_type="retrieval_document"
     )
     
     vector_db = Chroma.from_documents(documents=chunks, embedding=embeddings)
