@@ -5,7 +5,8 @@ langchain-community
 langchain-huggingface
 langchain-text-splitters
 pypdf
-chromadb==0.4.24
+chromadb==0.5.3
 python-dotenv
 sentence-transformers
+numpy<2.0.0
 protobuf==4.25.3
