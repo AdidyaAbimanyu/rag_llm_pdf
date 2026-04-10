@@ -60,7 +60,7 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    st.info("Brain: Llama 3.3 70B\nMemory: Google Embedding 004")
+    st.info("Brain: Llama 3.3 70B\nMemory: Google Embedding 001")
 
 # --- TAMPILAN UTAMA ---
 st.title("💬 Chat AI dengan Sitasi")
