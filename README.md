@@ -46,6 +46,7 @@ streamlit run app.py
 ```
 
 🌐 Deployment (Streamlit Cloud)
+
 This app is ready for deployment on Streamlit Cloud. Add your GROQ_API_KEY and HF_TOKEN in the Advanced Settings > Secrets section of your Streamlit dashboard.
 
 📝 Usage Notes
