@@ -1,38 +1,38 @@
 # 📑 Multi-Doc AI Chat (RAG System)
 
-Aplikasi Chatbot cerdas yang memungkinkan pengguna untuk berinteraksi dengan dokumen pribadi menggunakan teknik **Retrieval-Augmented Generation (RAG)**. Didukung oleh model bahasa Llama 3.3 (via Groq) dan Hugging Face Embeddings.
+A smart chatbot application that lets you chat with your personal documents using **Retrieval-Augmented Generation (RAG)**. Powered by Llama 3.3 (via Groq) and Hugging Face Embeddings.
 
-## ✨ Fitur Utama
-- **Multi-Format Support:** Membaca file `.pdf`, `.docx`, dan `.txt`.
-- **Large Context Brain:** Menggunakan Llama 3.3 70B dari Groq untuk jawaban yang cepat dan akurat.
-- **Efficient Memory:** Hugging Face Inference API untuk embedding teks tanpa beban komputasi lokal.
-- **Smart Citations:** Menampilkan referensi sumber (nama file & halaman) untuk setiap jawaban.
-- **Session Memory:** AI mengingat konteks percakapan sebelumnya.
-- **Security Satpam:** Pembatasan ukuran file maksimal 10MB untuk menjaga performa server.
+## ✨ Key Features
+- **Multi-Format Support:** Reads `.pdf`, `.docx`, and `.txt` files.
+- **Powerful AI Model:** Uses Llama 3.3 70B from Groq for fast and accurate answers.
+- **Efficient Processing:** Hugging Face Inference API for text embeddings with no local computing load.
+- **Smart Citations:** Shows source references (file name & page) for each answer.
+- **Session Memory:** AI remembers previous conversation context.
+- **File Size Limit:** Maximum 10MB per file to maintain server performance.
 
-## 🛠️ Stack Teknologi
+## 🛠️ Tech Stack
 - **Framework:** Streamlit
 - **Orchestration:** LangChain
 - **LLM:** Groq (Llama 3.3 70B)
 - **Embeddings:** Hugging Face (`all-MiniLM-L6-v2`)
 - **Vector Store:** ChromaDB
 
-## 🚀 Cara Menjalankan Lokal
+## 🚀 How to Run Locally
 
-### 1. Clone Repositori
+### 1. Clone the Repository
 ```bash
-git clone [https://github.com/username-kamu/nama-repo-kamu.git](https://github.com/username-kamu/nama-repo-kamu.git)
-cd nama-repo-kamu
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 ```
 
-2. Install Dependensi
-Pastikan kamu sudah menginstal Python 3.9+.
+2. Install Dependencies
+Make sure you have Python 3.9+ installed.
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Konfigurasi Environment
-Buat file .env di direktori utama dan isi dengan API Key kamu:
+3. Set Up Environment Variables
+Create a .env file in the root directory and add your API keys:
 
 Code snippet
 ```python
@@ -40,17 +40,17 @@ GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxx
 HF_TOKEN=hf_xxxxxxxxxxxxxxxxxxxx
 ```
 
-4. Jalankan Aplikasi
+4. Run the Application
 ```bash
 streamlit run app.py
 ```
 
 🌐 Deployment (Streamlit Cloud)
-Aplikasi ini dioptimalkan untuk dideploy ke Streamlit Cloud. Pastikan kamu menambahkan GROQ_API_KEY dan HF_TOKEN di bagian Advanced Settings > Secrets pada dashboard Streamlit.
+This app is ready for deployment on Streamlit Cloud. Add your GROQ_API_KEY and HF_TOKEN in the Advanced Settings > Secrets section of your Streamlit dashboard.
 
-📝 Catatan Penggunaan
-Aplikasi membatasi upload file maksimal 10MB per file untuk memastikan kecepatan proses embedding.
+📝 Usage Notes
+File uploads are limited to 10MB per file to ensure fast embedding processing.
 
-Gunakan tombol "Reset Chat" di sidebar untuk membersihkan riwayat percakapan dan memulai topik baru.
+Use the "Reset Chat" button in the sidebar to clear conversation history and start a new topic.
 
-Dibuat dengan ❤️ menggunakan LangChain & Streamlit.
+Built with ❤️ using LangChain & Streamlit.

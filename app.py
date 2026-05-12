@@ -2,7 +2,6 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 
-# --- IMPORT CORE ---
 from langchain_groq import ChatGroq
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from langchain_community.vectorstores import Chroma
@@ -10,7 +9,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-# --- IMPORT CHAINS ---
 from langchain_classic.chains.history_aware_retriever import create_history_aware_retriever
 from langchain_classic.chains.retrieval import create_retrieval_chain
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
@@ -20,21 +18,18 @@ load_dotenv()
 
 st.set_page_config(page_title="Multi-Doc AI Chat", page_icon="📑")
 
-# --- FUNGSI PEMROSESAN MULTI-FORMAT ---
 @st.cache_resource(show_spinner=False)
 def get_vector_db(uploaded_files):
     all_docs = []
     for uploaded_file in uploaded_files:
-        # Satpam 10MB
         if uploaded_file.size > 10 * 1024 * 1024:
-            st.error(f"❌ '{uploaded_file.name}' kegedean! Maks 10MB.")
+            st.error(f"❌ '{uploaded_file.name}' is too large! Max 10MB.")
             continue
             
         temp_path = f"temp_{uploaded_file.name}"
         with open(temp_path, "wb") as f:
             f.write(uploaded_file.getvalue())
         
-        # LOGIKA PEMILIHAN LOADER BERDASARKAN EKSTENSI
         try:
             if uploaded_file.name.endswith(".pdf"):
                 loader = PyPDFLoader(temp_path)
@@ -43,13 +38,13 @@ def get_vector_db(uploaded_files):
             elif uploaded_file.name.endswith(".txt"):
                 loader = TextLoader(temp_path)
             else:
-                st.warning(f"Format {uploaded_file.name} tidak didukung.")
+                st.warning(f"Format {uploaded_file.name} is not supported.")
                 os.remove(temp_path)
                 continue
                 
             all_docs.extend(loader.load())
         except Exception as e:
-            st.error(f"Gagal baca {uploaded_file.name}: {e}")
+            st.error(f"Failed to read {uploaded_file.name}: {e}")
         finally:
             if os.path.exists(temp_path):
                 os.remove(temp_path)
@@ -68,11 +63,10 @@ def get_vector_db(uploaded_files):
     vector_db = Chroma.from_documents(documents=chunks, embedding=embeddings)
     return vector_db.as_retriever(search_kwargs={"k": 3})
 
-# --- SIDEBAR ---
 with st.sidebar:
     st.title("📑 Multi-Doc Chat")
     uploaded_files = st.file_uploader(
-        "Upload PDF, DOCX, atau TXT", 
+        "Upload PDF, DOCX, or TXT", 
         type=["pdf", "docx", "txt"], 
         accept_multiple_files=True
     )
@@ -81,28 +75,27 @@ with st.sidebar:
         st.session_state.chat_history = []
         st.rerun()
 
-# --- MAIN UI ---
-st.title("💬 Chat Multi-Document AI")
+st.title("💬 Chat with Multiple Documents")
 
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 if uploaded_files:
-    with st.spinner("Membaca dokumen..."):
+    with st.spinner("Reading documents..."):
         retriever = get_vector_db(uploaded_files)
 
     if retriever:
         llm = ChatGroq(model_name="llama-3.3-70b-versatile", groq_api_key=os.getenv("GROQ_API_KEY"), temperature=0)
 
         contextualize_q_prompt = ChatPromptTemplate.from_messages([
-            ("system", "Rangkum chat jadi pertanyaan mandiri."),
+            ("system", "Summarize the chat into a standalone question."),
             MessagesPlaceholder("chat_history"),
             ("human", "{input}"),
         ])
         history_aware_retriever = create_history_aware_retriever(llm, retriever, contextualize_q_prompt)
 
         qa_prompt = ChatPromptTemplate.from_messages([
-            ("system", "Jawab berdasarkan dokumen: {context}"),
+            ("system", "Answer based on the documents: {context}"),
             MessagesPlaceholder("chat_history"),
             ("human", "{input}"),
         ])
@@ -113,11 +106,11 @@ if uploaded_files:
             with st.chat_message("user" if isinstance(message, HumanMessage) else "assistant"):
                 st.markdown(message.content)
 
-        if user_query := st.chat_input("Tanya apa saja tentang dokumenmu..."):
+        if user_query := st.chat_input("Ask anything about your documents..."):
             with st.chat_message("user"):
                 st.markdown(user_query)
 
-            with st.spinner("Berpikir..."):
+            with st.spinner("Thinking..."):
                 response = rag_chain.invoke({"input": user_query, "chat_history": st.session_state.chat_history})
                 answer = response["answer"]
                 sources = response.get("context", [])
@@ -125,17 +118,16 @@ if uploaded_files:
                 with st.chat_message("assistant"):
                     st.markdown(answer)
                     if sources:
-                        with st.expander("📌 Referensi"):
+                        with st.expander("📌 References"):
                             for i, doc in enumerate(sources):
                                 fname = os.path.basename(doc.metadata.get('source', 'Doc'))
                                 page = doc.metadata.get('page', 0) + 1
-                                # DOCX/TXT biasanya tidak punya metadata 'page' seakurat PDF
-                                loc = f"Halaman {page}" if "pdf" in fname.lower() else "Bagian Teks"
+                                loc = f"Page {page}" if "pdf" in fname.lower() else "Text Section"
                                 st.write(f"**{fname} ({loc})**")
                                 st.caption(f"_{doc.page_content[:150]}..._")
 
                 st.session_state.chat_history.extend([HumanMessage(content=user_query), AIMessage(content=answer)])
     else:
-        st.error("Gagal memproses file.")
+        st.error("Failed to process files.")
 else:
-    st.info("👈 Upload file PDF, DOCX, atau TXT di sidebar.")
+    st.info("👈 Upload PDF, DOCX, or TXT files in the sidebar.")
