@@ -49,6 +49,7 @@ streamlit run app.py
 This app is ready for deployment on Streamlit Cloud. Add your GROQ_API_KEY and HF_TOKEN in the Advanced Settings > Secrets section of your Streamlit dashboard.
 
 📝 Usage Notes
+
 File uploads are limited to 10MB per file to ensure fast embedding processing.
 
 Use the "Reset Chat" button in the sidebar to clear conversation history and start a new topic.
